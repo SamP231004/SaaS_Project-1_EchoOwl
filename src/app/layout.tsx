@@ -14,8 +14,8 @@ const eb_garamond = EB_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: "jStack App",
-  description: "Created using jStack",
+  title: "EchoOwl",
+  description: "EchoOwl is a fully-featured SaaS application designed for developers and businesses who want seamless, real-time event monitoring. Built using today’s most powerful web technologies, it combines performance, reliability, and a delightful user experience into one complete platform.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 }
 
