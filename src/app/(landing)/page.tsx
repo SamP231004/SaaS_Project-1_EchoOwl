@@ -152,7 +152,7 @@ const Page = () => {
                                     </p>
                                     <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                                         Get notified about critical events the moment they happen,
-                                        no matter if you're at home or on the go.
+                                        no matter if you&apos;re at home or on the go.
                                     </p>
                                 </div>
 
@@ -299,7 +299,7 @@ const Page = () => {
                             </div>
 
                             <p className="text-base sm:text-lg lg:text-lg/8 font-medium tracking-tight text-brand-950 text-center lg:text-left text-pretty">
-                                EchoOwl has been a game-changer for me. I've been using it for
+                                EchoOwl has been a game-changer for me. I&apos;ve been using it for
                                 two months now and seeing sales pop up in real-time is super
                                 satisfying.
                             </p>
@@ -332,8 +332,8 @@ const Page = () => {
                             </div>
 
                             <p className="text-base sm:text-lg lg:text-lg/8 font-medium tracking-tight text-brand-950 text-center lg:text-left text-pretty">
-                                EchoOwl's been paying off for our SaaS. Nice to have simple
-                                way to see how we're doing day-to-day. Definitely makes our
+                                EchoOwl&apos;s been paying off for our SaaS. Nice to have simple
+                                way to see how we&apos;re doing day-to-day. Definitely makes our
                                 lives easier.
                             </p>
 
