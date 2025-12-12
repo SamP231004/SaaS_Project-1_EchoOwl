@@ -67,7 +67,7 @@ export const router = <T extends Record<string, OperationType<any, any>>>(
           path,
           queryParsingMiddleware,
           ...operationMiddlewares,
-          (c) => {
+          async (c) => {
             const ctx = c.get("__middleware_output") || {}
             const parsedQuery = c.get("parsedQuery")
 
@@ -85,14 +85,16 @@ export const router = <T extends Record<string, OperationType<any, any>>>(
               }
             }
 
-            return operation.handler({ c, ctx, input })
+            const result = await operation.handler({ c, ctx, input })
+            return c.json(result)
           }
         )
       } else {
-        route.get(path, ...operationMiddlewares, (c) => {
+        route.get(path, ...operationMiddlewares, async (c) => {
           const ctx = c.get("__middleware_output") || {}
 
-          return operation.handler({ c, ctx, input: undefined })
+          const result = await operation.handler({ c, ctx, input: undefined })
+          return c.json(result)
         })
       }
     } else if (operation.type === "mutation") {
@@ -101,7 +103,7 @@ export const router = <T extends Record<string, OperationType<any, any>>>(
           path,
           bodyParsingMiddleware,
           ...operationMiddlewares,
-          (c) => {
+          async (c) => {
             const ctx = c.get("__middleware_output") || {}
             const parsedBody = c.get("parsedBody")
 
@@ -119,14 +121,16 @@ export const router = <T extends Record<string, OperationType<any, any>>>(
               }
             }
 
-            return operation.handler({ c, ctx, input })
+            const result = await operation.handler({ c, ctx, input })
+            return c.json(result)
           }
         )
       } else {
-        route.post(path, ...operationMiddlewares, (c) => {
+        route.post(path, ...operationMiddlewares, async (c) => {
           const ctx = c.get("__middleware_output") || {}
 
-          return operation.handler({ c, ctx, input: undefined })
+          const result = await operation.handler({ c, ctx, input: undefined })
+          return c.json(result)
         })
       }
     }
@@ -139,22 +143,22 @@ export const router = <T extends Record<string, OperationType<any, any>>>(
     { Bindings: Bindings; Variables: Variables },
     {
       [K in keyof T]: T[K] extends QueryOperation<any, any>
-        ? {
-            $get: {
-              input: InferInput<T[K]>
-              output: InferOutput<T[K]>
-              outputFormat: "json"
-              status: StatusCode
-            }
-          }
-        : {
-            $post: {
-              input: InferInput<T[K]>
-              output: InferOutput<T[K]>
-              outputFormat: "json"
-              status: StatusCode
-            }
-          }
+      ? {
+        $get: {
+          input: InferInput<T[K]>
+          output: InferOutput<T[K]>
+          outputFormat: "json"
+          status: StatusCode
+        }
+      }
+      : {
+        $post: {
+          input: InferInput<T[K]>
+          output: InferOutput<T[K]>
+          outputFormat: "json"
+          status: StatusCode
+        }
+      }
     }
   >
 }
