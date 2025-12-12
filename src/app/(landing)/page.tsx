@@ -9,6 +9,9 @@ import Image from "next/image"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { Icons } from "@/components/icons"
+import portfolio from '../../../public/portfolio.png'
+import linkedin from '../../../public/linkedin.png'
+import github from '../../../public/github.png'
 
 const Page = () => {
     const codeSnippet = `await fetch("http://localhost:3000/api/v1/events", {
@@ -276,7 +279,7 @@ const Page = () => {
                 </MaxWidthWrapper>
             </section>
 
-            <section className="relative py-24 sm:py-32 bg-white">
+            <section className="relative py-24 sm:py-16 bg-white">
                 <MaxWidthWrapper className="flex flex-col items-center gap-16 sm:gap-20">
                     <div>
                         <h2 className="text-center text-base/7 font-semibold text-brand-600">
@@ -360,6 +363,14 @@ const Page = () => {
                         Start For Free Today
                     </ShinyButton>
                 </MaxWidthWrapper>
+            </section>
+
+            <section className="flex fixed bottom-6 right-3">
+                <div className="flex flex-col gap-4">
+                    <a href="https://samp231004.github.io/Portfolio/" target="_blank"><Image className="h-6 w-6" src={portfolio} alt="" /></a>
+                    <a href="https://www.linkedin.com/in/samp2310/" target="_blank"><Image className="h-6 w-6" src={linkedin} alt="" /></a>
+                    <a href="https://github.com/SamP231004" target="_blank"><Image className="h-6 w-6" src={github} alt="" /></a>
+                </div>
             </section>
         </>
     )
