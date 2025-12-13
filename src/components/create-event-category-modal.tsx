@@ -61,9 +61,16 @@ export const CreateEventCategoryModal = ({
     const [isOpen, setIsOpen] = useState(false)
     const queryClient = useQueryClient()
 
-    const { mutate: createEventCategory, isPending } = useMutation({
+    const {
+        mutate: createEventCategory,
+        isPending,
+    } = useMutation({
         mutationFn: async (data: EventCategoryForm) => {
-            await client.category.createEventCategory.$post(data)
+            const res = await client.category.createEventCategory.$post(data)
+            if (!res.ok) {
+                throw new Error("Failed to create category")
+            }
+            return await res.json()
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user-event-categories"] })
@@ -85,6 +92,7 @@ export const CreateEventCategoryModal = ({
     const selectedEmoji = watch("emoji")
 
     const onSubmit = (data: EventCategoryForm) => {
+        console.log("Creating event category with data:", data);
         createEventCategory(data)
     }
 

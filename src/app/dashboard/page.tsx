@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import { DashboardPage } from "@/components/dashboard-page"
 import { db } from "@/db"
 import { currentUser } from "@clerk/nextjs/server"

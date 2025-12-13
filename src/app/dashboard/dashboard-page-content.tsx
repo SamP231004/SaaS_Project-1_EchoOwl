@@ -1,5 +1,21 @@
 "use client"
 
+type EventCategoryDTO = {
+    id: string
+    name: string
+    emoji: string | null
+    color: number
+    updatedAt: string | Date
+    createdAt: string | Date
+    uniqueFieldCount: number
+    eventsCount: number
+    lastPing: string | Date | null
+}
+
+type GetEventCategoriesResponse = {
+    categories: EventCategoryDTO[]
+}
+
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Modal } from "@/components/ui/modal"
@@ -15,28 +31,40 @@ export const DashboardPageContent = () => {
     const [deletingCategory, setDeletingCategory] = useState<string | null>(null)
     const queryClient = useQueryClient()
 
-    const { data: categories, isPending: isEventCategoriesLoading } = useQuery({
+    const {
+        data: categories = [],
+        isPending,
+        isFetching,
+    } = useQuery<EventCategoryDTO[]>({
         queryKey: ["user-event-categories"],
         queryFn: async () => {
             const res = await client.category.getEventCategories.$get()
-            const { categories } = await res.json()
-            return categories
+
+            const json =
+                (await res.json()) as GetEventCategoriesResponse
+
+            return json.categories
         },
     })
 
-    const { mutate: deleteCategory, isPending: isDeletingCategory } = useMutation(
-        {
-            mutationFn: async (name: string) => {
-                await client.category.deleteCategory.$post({ name })
-            },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["user-event-categories"] })
-                setDeletingCategory(null)
-            },
-        }
-    )
+    const {
+        mutate: deleteCategory,
+        isPending: isDeletingCategory,
+    } = useMutation({
+        mutationFn: async (name: string) => {
+            const res = await client.category.deleteCategory.$post({ name })
+            if (!res.ok) {
+                throw new Error("Failed to delete category")
+            }
+            return await res.json()
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["user-event-categories"] })
+            setDeletingCategory(null)
+        },
+    })
 
-    if (isEventCategoriesLoading) {
+    if (isPending || isFetching) {
         return (
             <div className="flex items-center justify-center flex-1 h-full w-full">
                 <LoadingSpinner />
@@ -140,7 +168,7 @@ export const DashboardPageContent = () => {
                             Delete Category
                         </h2>
                         <p className="text-sm/6 text-gray-600">
-                            Are you sure you want to delete the category &quot;{deletingCategory}&quot;?
+                            Are you sure you want to delete the category "{deletingCategory}"?
                             This action cannot be undone.
                         </p>
                     </div>

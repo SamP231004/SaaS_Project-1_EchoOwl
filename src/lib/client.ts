@@ -1,35 +1,26 @@
 import { AppType } from "@/server"
 import { hc } from "hono/client"
 import { HTTPException } from "hono/http-exception"
-import type { ContentfulStatusCode } from "hono/utils/http-status"
 import superjson from "superjson"
 
 const getBaseUrl = () => {
-  // browser should use relative path
   if (typeof window !== "undefined") {
     return ""
   }
 
-  if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3000/"
-  }
-
-  // if deployed to vercel, use vercel url
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-
-  // assume deployment to cloudflare workers otherwise, you'll get this URL after running
-  // `npm run deploy`, which deploys your server to cloudflare
-  return "https://<YOUR_DEPLOYED_WORKER_URL>/"
+  return process.env.NODE_ENV === "development"
+    ? "http://localhost:3000/"
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://<YOUR_DEPLOYED_WORKER_URL>/"
 }
 
 export const baseClient = hc<AppType>(getBaseUrl(), {
   fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
     const response = await fetch(input, { ...init, cache: "no-store" })
 
-    if (!response.ok) {
-      throw new HTTPException(response.status as ContentfulStatusCode, {
+    if (response.status >= 400) {
+      throw new HTTPException(response.status as any, {
         message: response.statusText,
         res: response,
       })
@@ -46,12 +37,12 @@ export const baseClient = hc<AppType>(getBaseUrl(), {
 
       try {
         return JSON.parse(text)
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Failed to parse response as JSON:", error)
         throw new Error("Invalid JSON response")
       }
     }
-
     return response
   },
 })["api"]
@@ -76,10 +67,6 @@ function serializeWithSuperJSON(data: any): any {
   )
 }
 
-/**
- * This is an optional convenience proxy to pass data directly to your API
- * instead of using nested objects as hono does by default
- */
 function createProxy(target: any, path: string[] = []): any {
   return new Proxy(target, {
     get(target, prop, receiver) {

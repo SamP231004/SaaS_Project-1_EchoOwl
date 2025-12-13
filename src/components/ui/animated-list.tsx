@@ -4,7 +4,7 @@ import React, { ComponentPropsWithoutRef, useEffect, useMemo, useState } from "r
 import { AnimatePresence, motion } from "framer-motion"
 import type { MotionProps } from "framer-motion"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils"
 
 export function AnimatedListItem({ children }: { children: React.ReactNode }) {
   const animations: MotionProps = {
