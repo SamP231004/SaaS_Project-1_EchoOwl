@@ -13,14 +13,14 @@ import { useEffect } from "react"
 const Page = () => {
     const router = useRouter()
 
-    const { data } = useQuery({
-        queryFn: async () => {
+    const { data } = useQuery<{ isSynced: boolean }>({
+        queryFn: async (): Promise<{ isSynced: boolean }> => {
             const res = await client.auth.getDatabaseSyncStatus.$get()
-            return await res.json()
+            return await res.json() as { isSynced: boolean }
         },
         queryKey: ["get-database-sync-status"],
         refetchInterval: (query) => {
-            return query.state.data?.isSynced ? false : 1000
+            return (query.state.data as { isSynced: boolean } | undefined)?.isSynced ? false : 1000
         },
     })
 
