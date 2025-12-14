@@ -29,13 +29,13 @@ export const projectRouter = router({
 
         const resetDate = addMonths(currentDate, 1)
 
-        return c.superjson({
+        return {
             categoriesUsed: categoryCount,
             categoriesLimit: limits.maxEventCategories,
             eventsUsed: eventCount,
             eventsLimit: limits.maxEventsPerMonth,
             resetDate,
-        })
+        }
     }),
 
     setDiscordID: privateProcedure

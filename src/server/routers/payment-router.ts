@@ -1,21 +1,25 @@
-// import { createCheckoutSession } from "@/lib/stripe"
-// import { router } from "../__internals/router"
-// import { privateProcedure } from "../procedures"
+import { createCheckoutSession } from "@/lib/stripe"
+import { router } from "../__internals/router"
+import { privateProcedure } from "../procedures"
+import type { PlanKey } from "@/config"
 
-// export const paymentRouter = router({
-//     createCheckoutSession: privateProcedure.mutation(async ({ c, ctx }) => {
-//         const { user } = ctx
+export const paymentRouter = router({
+    createCheckoutSession: privateProcedure.mutation(async ({ ctx }) => {
+        const { user } = ctx
 
-//         const session = await createCheckoutSession({
-//             userEmail: user.email,
-//             userId: user.id,
-//         })
+        const session = await createCheckoutSession({
+            userEmail: user.email,
+            userId: user.id,
+        })
 
-//         return c.json({ url: session.url })
-//     }),
+        return { url: session.url }
+    }),
 
-//     getUserPlan: privateProcedure.query(async ({ c, ctx }) => {
-//         const { user } = ctx
-//         return c.json({ plan: user.plan })
-//     }),
-// })
+    getUserPlan: privateProcedure.query(async ({ ctx }) => {
+        const { user } = ctx
+
+        return {
+            plan: user.plan as PlanKey,
+        }
+    })
+})
