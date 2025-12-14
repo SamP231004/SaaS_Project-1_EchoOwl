@@ -14,7 +14,7 @@ import linkedin from '../../../public/linkedin.png'
 import github from '../../../public/github.png'
 
 const Page = () => {
-    const codeSnippet = `await fetch("http://localhost:3000/api/v1/events", {
+    const codeSnippet = `await fetch("https://echo-owl.vercel.app/api/v1/events", {
         method: "POST",
         body: JSON.stringify({
             category: "sale",
